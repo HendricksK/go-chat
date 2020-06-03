@@ -3,7 +3,8 @@ package main
 import (
     "fmt"
     "net/http"
-
+    "io"
+    "os"
     "github.com/TutorialEdge/realtime-chat-go-react/pkg/websocket"
 )
 
@@ -24,24 +25,21 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 }
 
 func setupRoutes() {
-    // http.HandleFunc("/ws", serveWs)
-
-    // http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-    //     fmt.Fprintf(w, "Simple Server")
-    // })
-
     pool := websocket.NewPool()
     go pool.Start()
 
     http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
         serveWs(pool, w, r)
     })
+
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+        io.WriterString(w, "CHATAPP 1.0")
+    })
 }
 
 func main() {
-
-    fmt.Println("chat app v0.0.1")
+    port := os.Getenv("PORT")
 	setupRoutes()
-    http.ListenAndServe(":8080", nil)
+    http.ListenAndServe(":"+port, nil)
     
 }
