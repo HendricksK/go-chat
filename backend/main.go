@@ -33,7 +33,7 @@ func setupRoutes() {
     })
 
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
-        io.WriterString(w, "CHATAPP 1.0")
+        io.WriteString(w, "CHATAPP 1.0")
     })
 }
 
